@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
 
-export function connectDB(DATABASE_URL) {
+export function connectDB(MONGO_URI) {
    return mongoose
-      .connect(DATABASE_URL)
+      .connect(MONGO_URI)
       .then(() => console.log("connected to db"))
       .catch((e) => console.log(e));
 }
