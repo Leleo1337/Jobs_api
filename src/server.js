@@ -1,12 +1,15 @@
-import app from "./app.js";
+import { configDotenv } from "dotenv";
 import { connectDB } from "./db/connect.js";
+import app from "./app.js";
+
+configDotenv();
 
 const PORT = process.env.PORT;
-const DATABASE_URL = process.env.DATABASE_URL;
+const MONGO_URI = process.env.MONGO_URI;
 
 async function start() {
    try {
-      await connectDB(DATABASE_URL);
+      await connectDB(MONGO_URI);
       if (!PORT) {
          throw new Error("No port found in your .env");
       }
