@@ -3,7 +3,7 @@ export async function getAllJobs(req, res) {
 }
 
 export async function getJob(req, res) {
-   res.send("get job");
+   res.json({user: req.user})
 }
 export async function createJob(req, res) {
    res.send("create job");
