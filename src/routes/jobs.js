@@ -3,7 +3,9 @@ import { createJob, deleteJob, getAllJobs, getJob, updateJob } from "../controll
 
 const router = express.Router();
 
-// @/api/v1/jobs/
+// rotas jobs
+
+// - /api/v1/jobs/
 router.get("/", getAllJobs);
 router.get("/:id", getJob);
 router.post("/", createJob);
