@@ -24,6 +24,10 @@ const UserSchema = new mongoose.Schema({
       required: [true, "Please provide a password"],
       minLength: 6,
    },
+   isAdmin: {
+      type: Boolean,
+      default: false
+   }
 });
 
 // o pre("save") é um middleware que serve para executar uma função antes que algo seja salvo no banco de dados )
@@ -36,7 +40,7 @@ UserSchema.pre("save", async function () {
 // basicamente eu crio uma função dentro do meu schema, e eu posso chamar ela quando eu quiser manipular algum dado
 // essa função serve para criar o token do jwt
 UserSchema.methods.createToken = function () {
-   return jwt.sign({ userID: this._id, name: this.name }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_LIFETIME });
+   return jwt.sign({ userID: this._id, name: this.name, isAdmin: this.isAdmin }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_LIFETIME });
 };
 
 // essa função serve para comparar as senhas, ela recebe a senha do body como parametro e é comparada com a senha criptografada, e retorna se deu "match"
