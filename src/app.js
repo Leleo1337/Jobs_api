@@ -1,11 +1,11 @@
 import express from "express";
 import notFoundMiddleware from "./middlewares/not-found.js";
 import errorHandlerMiddleware from "./middlewares/error-handler.js";
+import authenticationMiddleware from "./middlewares/authentication.js";
+import adminMiddleware from "./middlewares/adminMiddleware.js";
 import auth from "./routes/auth.js";
 import jobs from "./routes/jobs.js";
 import users from "./routes/users.js";
-import authenticationMiddleware from "./middlewares/authentication.js";
-import adminMiddleware from "./middlewares/adminMiddleware.js";
 
 const app = express();
 
