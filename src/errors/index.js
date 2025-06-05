@@ -1,6 +1,4 @@
-import BadRequest from "./bad-request.js";
-import CustomApiError from "./custom-api.js";
-import NotFound from "./not-found.js";
-import Unauthenticated from "./unauthenticated.js";
-
-export default { CustomApiError, NotFound, Unauthenticated, BadRequest };
+export { default as BadRequest } from "./bad-request.js";
+export { default as CustomApiError } from "./custom-api.js";
+export { default as NotFound } from "./not-found.js";
+export { default as Unauthenticated } from "./unauthenticated.js";
