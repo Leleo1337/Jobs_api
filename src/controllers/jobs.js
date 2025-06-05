@@ -1,18 +1,48 @@
+import Job from "../models/Job.js";
+import { StatusCodes } from "http-status-codes";
+import { BadRequest, NotFound } from "../errors/index.js";
+
 export async function getAllJobs(req, res) {
-   res.send("get all jobs");
+   const jobs = await Job.find({createdBy: req.user.userID}).sort('createdAt');
+   res.status(StatusCodes.OK).json({ success: true, count: jobs.length, jobs });
 }
 
 export async function getJob(req, res) {
-   res.json({user: req.user})
+   const { id } = req.params;
+   const job = await Job.findById(id);
+   if (!job) {
+      throw new NotFound(`no job with id ${id} found`);
+   }
+   res.status(StatusCodes.OK).json({ success: true, job });
 }
 export async function createJob(req, res) {
-   res.send("create job");
+   req.body.createdBy = req.user.userID;
+
+   const job = await Job.create(req.body);
+
+   res.status(StatusCodes.CREATED).json({ success: true, createdJob: job });
 }
 
 export async function updateJob(req, res) {
-   res.send("update job");
+   const { id } = req.params;
+
+   const job = await Job.findByIdAndUpdate(id, req.body, { new: true });
+
+   if (!job) {
+      throw new NotFound(`no job with id ${id} found`);
+   }
+
+   res.status(StatusCodes.OK).json({ success: true, updatedJob: job });
 }
 
 export async function deleteJob(req, res) {
-   res.send("delete job");
+   const { id } = req.params;
+
+   const job = await Job.findByIdAndDelete(id);
+
+   if (!job) {
+      throw new NotFound(`no job with id ${id} found`);
+   }
+
+   res.status(StatusCodes.OK).json({ success: true, deletedjob: job });
 }
