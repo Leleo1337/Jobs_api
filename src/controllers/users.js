@@ -54,7 +54,7 @@ export async function deleteUser(req, res) {
       const user = await User.findByIdAndDelete(userID);
       if (!user) throw new NotFound(`No user with id ${userID} found`);
 
-      res.status(StatusCodes.OK).json({ success: true, deletedUser: user });
+      res.status(StatusCodes.OK).json({ success: true, deletedUser: { id: user._id, name: user.name, email:user.email } });
    } catch (error) {
       throw new BadRequest(error.message);
    }
