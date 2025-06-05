@@ -13,17 +13,18 @@ async function authenticationMiddleware(req, res, next) {
 
    // remove o "Bearer" e pega só o token
    const token = authorization.split(" ")[1];
-
    try {
       // verifica se o token é valido
       const payload = jwt.verify(token, process.env.JWT_SECRET);
-
+      console.log(payload)
       //extrai dados do token
-      const { userID, name } = payload;
-      req.user = { userID, name };
-
+      const { userID, name, isAdmin } = payload;
+      req.user = { userID, name, isAdmin };
+      // Procura o usuario no banco de dados
       const user = await User.findById(userID);
+      // Se não houver o usuario, então é porque o usuario foi deletado com o DELETE /users
       if (!user) throw new Unauthenticated("Invalid token");
+
       // passa para proxima rota
       next();
    } catch (error) {
