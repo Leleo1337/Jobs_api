@@ -4,12 +4,13 @@ import BadRequest from "../errors/bad-request.js";
 import Unauthenticated from "../errors/unauthenticated.js";
 
 export async function register(req, res) {
+   const { name, email, password } = req.body;
    // cria o usuario com oq recebeu do body
-   const user = await User.create({ ...req.body });
+   const user = await User.create({ name, email, password, isAdmin: false });
 
    //cria o token
    const token = user.createToken();
-   res.status(StatusCodes.CREATED).json({ success: true, user_created: { name: user.name }, token });
+   res.status(StatusCodes.CREATED).json({ success: true, user_created: { id: user._id, name: user.name }, token });
 }
 
 export async function login(req, res) {
