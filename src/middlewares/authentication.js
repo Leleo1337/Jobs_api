@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
-import Unauthenticated from "../errors/unauthenticated.js";
+import {Unauthenticated} from "../errors/index.js";
 
 async function authenticationMiddleware(req, res, next) {
    // pega o "authorization" do header
@@ -16,14 +16,18 @@ async function authenticationMiddleware(req, res, next) {
    try {
       // verifica se o token é valido
       const payload = jwt.verify(token, process.env.JWT_SECRET);
-      console.log(payload)
+
       //extrai dados do token
-      const { userID, name, isAdmin } = payload;
-      req.user = { userID, name, isAdmin };
+      const { userID } = payload;
+
       // Procura o usuario no banco de dados
-      const user = await User.findById(userID);
+      const user = await User.findById(userID).select("-password -_id -__v");
+
       // Se não houver o usuario, então é porque o usuario foi deletado com o DELETE /users
       if (!user) throw new Unauthenticated("Invalid token");
+
+      // para as proximas rotas vai passar os dados do usuario quando chamado o req.user
+      req.user = {userID, ...user.toObject()};   
 
       // passa para proxima rota
       next();
