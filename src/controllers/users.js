@@ -28,7 +28,7 @@ export async function getUser(req, res) {
 
 export async function updateUser(req, res) {
    const { id: userID } = req.params;
-   const { name, email, password } = req.body;
+   const { name, email, password, isAdmin } = req.body;
 
    try {
       const user = await User.findById(userID);
@@ -38,6 +38,7 @@ export async function updateUser(req, res) {
       if (name) user.name = name;
       if (email) user.email = email;
       if (password) user.password = password;
+      if (isAdmin) user.isAdmin = isAdmin;
 
       await user.save();
 
@@ -54,7 +55,10 @@ export async function deleteUser(req, res) {
       const user = await User.findByIdAndDelete(userID);
       if (!user) throw new NotFound(`No user with id ${userID} found`);
 
-      res.status(StatusCodes.OK).json({ success: true, deletedUser: { id: user._id, name: user.name, email:user.email } });
+      res.status(StatusCodes.OK).json({
+         success: true,
+         deletedUser: { id: user._id, name: user.name, email: user.email },
+      });
    } catch (error) {
       throw new BadRequest(error.message);
    }
