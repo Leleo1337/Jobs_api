@@ -1,11 +1,35 @@
 import { StatusCodes } from "http-status-codes";
-import CustomApiError from "../errors/custom-api.js";
 
 function errorHandlerMiddleware(err, req, res, next) {
-   if (err instanceof CustomApiError) {
-      return res.status(err.statusCode).json({ msg: err.message });
+   const customError = {
+   // set default
+      statusCode: err.statusCode || StatusCodes.INTERNAL_SERVER_ERROR,
+      msg: err.message || "Something went wrong, try again later",
+   };
+
+   //     NÃO PRECISO MAIS USAR ISSO
+   // if (err instanceof CustomApiError) {
+   //    return res.status(err.statusCode).json({ msg: err.message });
+   // }
+
+   if (err.name == "ValidationError") {
+      customError.statusCode = 400;
+      customError.msg = Object.values(err.errors)
+         .map((item) => item.message)
+         .join(", ");
    }
-   return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ err });
+
+   if (err.code === "") {
+      customError.statusCode = 400;
+      customError.msg = `Duplicate value entered for ${err.keyValue.id} field, please choose another value!`;
+   }
+   
+   if (err.name === "CastError") {
+      customError.statusCode = 404;
+      customError.msg = `No item with id ${err.value} found`;
+   }
+
+   return res.status(customError.statusCode).json({ msg: customError.msg });
 }
 
 export default errorHandlerMiddleware;
