@@ -26,6 +26,10 @@ app.set("trust proxy", 1);
 app.use(limiter);
 
 // rotas
+app.get('/', (req,res) => {
+    res.send('jobs api')
+})
+
 app.use("/api/v1/auth", auth);
 app.use("/api/v1/jobs", authenticationMiddleware, jobs);
 app.use("/api/v1/users", authenticationMiddleware, adminMiddleware, users);
