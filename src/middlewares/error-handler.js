@@ -23,7 +23,7 @@ function errorHandlerMiddleware(err, req, res, next) {
       customError.statusCode = 400;
       customError.msg = `Duplicate value entered for ${err.keyValue.id} field, please choose another value!`;
    }
-   
+
    if (err.name === "CastError") {
       customError.statusCode = 404;
       customError.msg = `No item with id ${err.value} found`;
