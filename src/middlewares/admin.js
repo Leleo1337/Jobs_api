@@ -1,5 +1,3 @@
-// placeholder
-
 import BadRequest from "../errors/bad-request.js";
 
 function adminMiddleware(req, res, next) {
