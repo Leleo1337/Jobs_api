@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
-import xss from "xss-clean";
+//import xss from "xss-clean";
 import limiter from "./middlewares/rateLimiter.js";
 import notFoundMiddleware from "./middlewares/not-found.js";
 import errorHandlerMiddleware from "./middlewares/error-handler.js";
@@ -21,7 +21,7 @@ app.use(cors());
 
 // middlewares para segurança
 app.use(helmet());
-app.use(xss());
+//app.use(xss());  por algum motivo o xss-clean tá bugado
 app.set("trust proxy", 1);
 app.use(limiter);
 
